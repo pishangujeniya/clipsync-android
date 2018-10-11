@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.clipsync.clipsync">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        tools:replace = "android:allowBackup"
+        android:allowBackup="false"
+        android:icon="@drawable/clip_sync_logo_2"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/clip_sync_logo_2"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".SignUpActivity" />
+        <activity
+            android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DashBoard"
+            android:label="@string/title_activity_dash_board" />
+        <activity android:name=".ClipMainActivity"></activity>
+
+        <service
+            android:name=".service.ClipBoardMonitor"
+            android:label="Clipboard Monitor"
+            android:exported="false"/>
+    </application>
+
+</manifest>

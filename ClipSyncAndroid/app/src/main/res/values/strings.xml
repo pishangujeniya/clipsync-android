@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ClipSync</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_sign_up">LoginActivity</string>
+
+
+    <!--ClipSync web api-->
+    <string name="apiSignUp">http://clipsync.000webhostapp.com/SignUp.php</string>
+    <string name="apiLogin">http://clipsync.000webhostapp.com/LogIn.php</string>
+    <string name="apiInsertClip">http://clipsync.000webhostapp.com/InsertClip.php</string>
+    <string name="apiUpdateClip">http://clipsync.000webhostapp.com/UpdateClip.php</string>
+    <string name="apiDeleteClip">http://clipsync.000webhostapp.com/DeleteClip.php</string>
+    <string name="apiGetClips">http://clipsync.000webhostapp.com/GetClips.php</string>
+    <string name="apiCheckUpdate">http://clipsync.000webhostapp.com/CheckUpdate.php</string>
+
+
+    <!--Button Names-->
+    <string name="discard">DISCARD</string>
+    <string name="update">UPDATE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="later">LATER</string>
+    <string name="delete">DELETE</string>
+
+    <!--Titles-->
+    <string name="warning_title">Warning</string>
+    <string name="info_title">Information</string>
+
+    <!--App Strings-->
+    <string name="restart_app">Restart App</string>
+    <string name="title_activity_dash_board">DashBoard</string>
+
+    <string name="update_changes_or_discard">Do you want to update changes or discard?</string>
+    <string name="update_app">There is a new version update available, Do you want to update it ?</string>
+    <string name="enter_text_here">Enter Text Here</string>
+    <string name="title">TITLE</string>
+
+</resources>
