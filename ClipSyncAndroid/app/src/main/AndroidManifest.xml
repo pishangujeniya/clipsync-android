@@ -34,13 +34,18 @@
         <service
             android:name=".service.ClipBoardMonitor"
             android:exported="false"
-            android:label="Clipboard Monitor" />
+            android:label="Clipboard Monitor"
+            />
         <service
             android:name=".service.SignalRService"
             android:exported="false"
-            android:label="ClipSync SignalR" />
+            android:label="ClipSync SignalR"
+
+            />
 
         <activity android:name=".ControlsActivity"></activity>
     </application>
+
+
 
 </manifest>

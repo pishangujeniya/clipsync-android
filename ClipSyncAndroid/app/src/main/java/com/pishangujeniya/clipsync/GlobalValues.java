@@ -8,5 +8,11 @@ package com.pishangujeniya.clipsync;
      public static String send_copied_text_signalr_method_name = "SendCopiedText";
      public static String copied_water_mark = "- Copied By ClipSync";
 
+     public static String STOP_SERVICE = "STOP_SERVICE";
+     public static String START_SERVICE = "START_SERVICE";
+
+     public static int SIGNALR_SERVICE_NOTIFICATION_ID = 1001;
+
+
 
 }

@@ -1,26 +1,32 @@
 package com.pishangujeniya.clipsync.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
+import com.pishangujeniya.clipsync.ControlsActivity;
 import com.pishangujeniya.clipsync.GlobalValues;
+import com.pishangujeniya.clipsync.R;
 import com.pishangujeniya.clipsync.helper.Utility;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import microsoft.aspnet.signalr.client.Action;
+import microsoft.aspnet.signalr.client.ConnectionState;
 import microsoft.aspnet.signalr.client.ErrorCallback;
 import microsoft.aspnet.signalr.client.LogLevel;
 import microsoft.aspnet.signalr.client.Logger;
@@ -39,6 +45,17 @@ public class SignalRService extends Service {
     public Boolean is_service_connected = false;
 
     private Context context;
+    private NotificationManager mNotificationManager;
+    private Notification notification;
+    private String CHANNEL_ID = "ClipSyncServer";// The id of the channel.
+    private CharSequence name = "ClipSyncServer";// The user-visible name of the channel.
+    private String NOTIFICATION_TITLE = "ClipSync Working";
+    private String NOTIFICATION_CONTENT_TEXT = "Copy Paste";
+    private PendingIntent pStopSelf;
+    private Bitmap icon;
+    private PendingIntent pendingIntent;
+
+    private NotificationChannel mChannel = null;
 
     private Utility utility;
 
@@ -55,6 +72,8 @@ public class SignalRService extends Service {
 
         // context = this.getApplicationContext();
         context = getBaseContext();
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         utility = new Utility(context);
 
@@ -65,15 +84,35 @@ public class SignalRService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("service", "service start  - service");
-        int result = super.onStartCommand(intent, flags, startId);
-        startSignalR();
-        return result;
+        if (GlobalValues.STOP_SERVICE.equals(intent.getAction())) {
+            Log.d(TAG, "called to cancel service");
+            stopForeground(true);
+            stopSelf();
+            mNotificationManager.cancel(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID);
+        } else if (GlobalValues.START_SERVICE.equals(intent.getAction())) {
+            showNotification();
+            startSignalR();
+        }
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        conn.stop();
+        if (conn != null) {
+
+            try {
+                ConnectionState state = conn.getState();
+                if (state.compareTo(ConnectionState.Connected) > -1) {
+                    conn.stop();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        if (mNotificationManager != null) {
+            mNotificationManager.cancel(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID);
+        }
         super.onDestroy();
     }
 
@@ -87,7 +126,7 @@ public class SignalRService extends Service {
     public IBinder onBind(Intent intent) {
         // Return the communication channel to the service.
         Log.d("service", "onBind  - service");
-        startSignalR();
+//        startSignalR();
         return mBinder;
     }
 
@@ -102,13 +141,46 @@ public class SignalRService extends Service {
         }
     }
 
-    /**
-     * method for clients (activities)
-     */
-    private void getIncommingcht() {
-        Log.d("Inside : ", "getIncommingcht - service - Method");
-//        mHubProxy.invoke("addGroup", ProileId, Copanyid, "true", Token);
-//        mHubProxy.invoke("GetChatQueue",ProileId, Token);
+    private void showNotification() {
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+        Intent notificationIntent = new Intent(this, ControlsActivity.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        icon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.clip_sync_logo_2);
+
+        Intent stop_self_intent = new Intent(SignalRService.this, SignalRService.class);
+        stop_self_intent.setAction(GlobalValues.STOP_SERVICE);
+
+        pStopSelf = PendingIntent.getService(context, GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID, stop_self_intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        notification = new NotificationCompat.Builder(this)
+                .setContentTitle(NOTIFICATION_TITLE)
+                .setTicker(NOTIFICATION_TITLE)
+                .setContentText(NOTIFICATION_CONTENT_TEXT)
+                .setSmallIcon(R.drawable.clip_sync_logo_2)
+                .setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setChannelId(CHANNEL_ID)
+                .addAction(android.R.drawable.ic_media_previous, "Stop", pStopSelf)
+                .build();
+
+
+        startForeground(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID, notification);
+
     }
 
     public void sendCopiedText(String text) {
@@ -117,15 +189,8 @@ public class SignalRService extends Service {
             mHubProxy.invoke(GlobalValues.send_copied_text_signalr_method_name, text);
         } else {
             Log.e(TAG, "Service is not connected so not sending copied text");
-
         }
     }
-
-    public void selectVisitor(String visitor_id, String CompanyID, String DisplayName, String startTime) {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        mHubProxy.invoke("seleVisitr", DisplayName, timeStamp, startTime);
-    }
-
 
 
     private void startSignalR() {
@@ -142,7 +207,6 @@ public class SignalRService extends Service {
 
         // Create the hub proxy
         HubProxy proxy = conn.createHubProxy(GlobalValues.SignalHubName);
-
 
         mHubProxy = proxy;
 
@@ -204,8 +268,25 @@ public class SignalRService extends Service {
 
             @Override
             public void run() {
-                System.out.println("CONNECTED");
+                System.out.println("Connecting...");
                 is_service_connected = true;
+
+                if (mNotificationManager != null && notification != null) {
+                    notification = new NotificationCompat.Builder(context)
+                            .setContentTitle(NOTIFICATION_TITLE)
+                            .setTicker(NOTIFICATION_TITLE)
+                            .setContentText("Connecting...")
+                            .setSmallIcon(R.drawable.clip_sync_logo_2)
+                            .setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
+                            .setContentIntent(pendingIntent)
+                            .setOngoing(true)
+                            .setOnlyAlertOnce(true)
+                            .setChannelId(CHANNEL_ID)
+                            .addAction(android.R.drawable.ic_media_previous, "Stop", pStopSelf)
+                            .build();
+
+                    mNotificationManager.notify(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID, notification);
+                }
             }
         });
 
@@ -215,6 +296,22 @@ public class SignalRService extends Service {
             @Override
             public void run() {
                 System.out.println("DISCONNECTED");
+                if (mNotificationManager != null && notification != null) {
+                    notification = new NotificationCompat.Builder(context)
+                            .setContentTitle(NOTIFICATION_TITLE)
+                            .setTicker(NOTIFICATION_TITLE)
+                            .setContentText("Disconnected")
+                            .setSmallIcon(R.drawable.clip_sync_logo_2)
+                            .setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
+                            .setContentIntent(pendingIntent)
+                            .setAutoCancel(true)
+                            .setOnlyAlertOnce(true)
+                            .setChannelId(CHANNEL_ID)
+                            .addAction(android.R.drawable.ic_media_previous, "Stop", pStopSelf)
+                            .build();
+
+                    mNotificationManager.notify(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID, notification);
+                }
             }
         });
 
@@ -222,7 +319,23 @@ public class SignalRService extends Service {
         conn.start().done(new Action<Void>() {
             @Override
             public void run(Void obj) {
-                System.out.println("Done Connecting!");
+                System.out.println("Connected");
+                if (mNotificationManager != null && notification != null) {
+                    notification = new NotificationCompat.Builder(context)
+                            .setContentTitle(NOTIFICATION_TITLE)
+                            .setTicker(NOTIFICATION_TITLE)
+                            .setContentText("Connected")
+                            .setSmallIcon(R.drawable.clip_sync_logo_2)
+                            .setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
+                            .setContentIntent(pendingIntent)
+                            .setOngoing(true)
+                            .setOnlyAlertOnce(true)
+                            .setChannelId(CHANNEL_ID)
+                            .addAction(android.R.drawable.ic_media_previous, "Stop", pStopSelf)
+                            .build();
+
+                    mNotificationManager.notify(GlobalValues.SIGNALR_SERVICE_NOTIFICATION_ID, notification);
+                }
             }
         });
 

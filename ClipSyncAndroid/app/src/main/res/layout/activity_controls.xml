@@ -1,73 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".ControlsActivity">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/activity_controls_status_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:text="Status : "
-            android:textColor="@android:color/white"
-            tools:layout_editor_absoluteX="163dp"
-            tools:layout_editor_absoluteY="109dp" />
-
-
-        <Button
-            android:id="@+id/activity_controls_status_refresh_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:text="Refresh"
-            android:textColor="@android:color/holo_green_light"
-            tools:layout_editor_absoluteX="147dp"
-            tools:layout_editor_absoluteY="230dp" />
-
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/activity_controls_service_start_button"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_controls_service_start_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:text="Start"
-        android:textColor="@android:color/holo_blue_bright"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="230dp" />
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_power_settings_new_white_24dp"
+        app:backgroundTint="@android:color/holo_green_dark"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/activity_controls_service_stop_fab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/activity_controls_service_stop_button"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_controls_service_stop_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:text="Stop"
-        android:textColor="@android:color/holo_red_dark"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="230dp" />
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_power_settings_new_white_24dp"
+        app:backgroundTint="@android:color/holo_red_dark"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/activity_controls_service_start_fab" />
 
-
-    <Button
-        android:id="@+id/activity_controls_log_out_button"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_controls_log_out_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:text="LogOut"
-        android:textColor="@android:color/holo_blue_dark"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="230dp" />
-</LinearLayout>
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_exit_to_app_black_24dp"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

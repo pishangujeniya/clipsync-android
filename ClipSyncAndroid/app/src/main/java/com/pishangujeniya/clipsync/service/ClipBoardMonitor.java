@@ -75,7 +75,7 @@ public class ClipBoardMonitor extends Service {
             Log.e(TAG, "Inside service connected - Activity ");
             // We've bound to SignalRService, cast the IBinder and get SignalRService instance
             SignalRService.LocalBinder binder = (SignalRService.LocalBinder) service;
-            mService = binder.getService();
+            mService = (SignalRService) binder.getService();
             mBound = true;
             Log.e(TAG, "bound status - " + mBound);
         }
