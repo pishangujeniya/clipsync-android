@@ -1,14 +1,25 @@
-package com.clipsync.clipsync.helper;
+package com.pishangujeniya.clipsync.helper;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
-import static android.content.Context.CONNECTIVITY_SERVICE;
+import com.pishangujeniya.clipsync.GlobalValues;
+
+import java.util.Objects;
+
+import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class Utility {
+
+    private final String TAG = Utility.class.getSimpleName();
+
     Context context;
     SharedPreferences userSharedPref;
 
@@ -30,18 +41,13 @@ public class Utility {
 
         final ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-        if (activeNetwork != null && activeNetwork.isConnected())
-
-        {
+        if (activeNetwork != null && activeNetwork.isConnected()) {
             // notify user you are online
             return true;
-        } else
-
-        {
+        } else {
             // notify user you are not online
             return false;
         }
-
     }
 
     public void setUid(int uid) {
@@ -79,5 +85,33 @@ public class Utility {
         editor.clear();
         editor.commit();
     }
+
+    public String getLastClipboardText() {
+
+        ClipboardManager mClipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+
+        assert mClipboardManager != null;
+        if (!(mClipboardManager.hasPrimaryClip())) {
+
+        } else if (!(Objects.requireNonNull(mClipboardManager.getPrimaryClipDescription()).hasMimeType(MIMETYPE_TEXT_PLAIN))) {
+
+            // since the clipboard has data but it is not plain text
+            //since the clipboard contains plain text.
+            ClipData clip = mClipboardManager.getPrimaryClip();
+            assert clip != null;
+            return clip.getItemAt(0).getText().toString();
+
+
+        } else {
+
+            //since the clipboard contains plain text.
+            ClipData clip = mClipboardManager.getPrimaryClip();
+            assert clip != null;
+            return clip.getItemAt(0).getText().toString();
+        }
+
+        return "";
+    }
+
 
 }

@@ -5,13 +5,13 @@
 
 
     <!--ClipSync web api-->
-    <string name="apiSignUp">http://clipsync.000webhostapp.com/SignUp.php</string>
-    <string name="apiLogin">http://clipsync.000webhostapp.com/LogIn.php</string>
-    <string name="apiInsertClip">http://clipsync.000webhostapp.com/InsertClip.php</string>
-    <string name="apiUpdateClip">http://clipsync.000webhostapp.com/UpdateClip.php</string>
-    <string name="apiDeleteClip">http://clipsync.000webhostapp.com/DeleteClip.php</string>
-    <string name="apiGetClips">http://clipsync.000webhostapp.com/GetClips.php</string>
-    <string name="apiCheckUpdate">http://clipsync.000webhostapp.com/CheckUpdate.php</string>
+    <string name="apiSignUp">http://clipsync.pishangujeniya.com/SignUp.php</string>
+    <string name="apiLogin">http://clipsync.pishangujeniya.com/LogIn.php</string>
+    <string name="apiInsertClip">http://clipsync.pishangujeniya.com/InsertClip.php</string>
+    <string name="apiUpdateClip">http://clipsync.pishangujeniya.com/UpdateClip.php</string>
+    <string name="apiDeleteClip">http://clipsync.pishangujeniya.com/DeleteClip.php</string>
+    <string name="apiGetClips">http://clipsync.pishangujeniya.com/GetClips.php</string>
+    <string name="apiCheckUpdate">http://clipsync.pishangujeniya.com/CheckUpdate.php</string>
 
 
     <!--Button Names-->

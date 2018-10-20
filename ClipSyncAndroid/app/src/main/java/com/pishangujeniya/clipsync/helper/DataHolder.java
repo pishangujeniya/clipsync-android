@@ -1,4 +1,4 @@
-package com.clipsync.clipsync.helper;
+package com.pishangujeniya.clipsync.helper;
 
 public class DataHolder {
 

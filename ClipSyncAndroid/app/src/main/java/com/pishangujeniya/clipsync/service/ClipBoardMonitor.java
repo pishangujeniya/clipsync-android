@@ -1,4 +1,4 @@
-package com.clipsync.clipsync.service;
+package com.pishangujeniya.clipsync.service;
 
 /*
  * Copyright 2013 Tristan Waddington
@@ -25,16 +25,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Environment;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.clipsync.clipsync.ClipMainActivity;
-import com.clipsync.clipsync.R;
-import com.clipsync.clipsync.helper.Utility;
+import com.pishangujeniya.clipsync.ClipMainActivity;
+import com.pishangujeniya.clipsync.GlobalValues;
+import com.pishangujeniya.clipsync.R;
+import com.pishangujeniya.clipsync.helper.Utility;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -61,6 +64,30 @@ public class ClipBoardMonitor extends Service {
     private ExecutorService mThreadPool = Executors.newSingleThreadExecutor();
     private ClipboardManager mClipboardManager;
 
+
+    private boolean mBound = false;
+    private SignalRService mService;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            Log.e(TAG, "Inside service connected - Activity ");
+            // We've bound to SignalRService, cast the IBinder and get SignalRService instance
+            SignalRService.LocalBinder binder = (SignalRService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            Log.e(TAG, "bound status - " + mBound);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+            mBound = false;
+            Log.e(TAG, "bound disconnected - status - " + mBound);
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,12 +102,30 @@ public class ClipBoardMonitor extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Intent mIntent = new Intent(this, SignalRService.class);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
         if (mClipboardManager != null) {
             mClipboardManager.removePrimaryClipChangedListener(
                     mOnPrimaryClipChangedListener);
+        }
+
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+            Log.e(TAG, "bound disconnecting - status - " + mBound);
+
+        }
+        if (mService != null) {
+            mService.onDestroy();
         }
     }
 
@@ -148,17 +193,39 @@ public class ClipBoardMonitor extends Service {
 //                    mThreadPool.execute(new WriteHistoryRunnable(
 //                            clip.getItemAt(0).getText()));
                     if (!(mClipboardManager.hasPrimaryClip())) {
-
+                        Log.e(TAG,"no Primary Clip");
                     } else if (!(mClipboardManager.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN))) {
 
                         // since the clipboard has data but it is not plain text
-
+                        //since the clipboard contains plain text.
+                        ClipData clip = mClipboardManager.getPrimaryClip();
+                        String copied_content = clip.getItemAt(0).getText().toString();
+                        Log.e(TAG,"Content at 0 "+copied_content);
+                        if(copied_content.contains(GlobalValues.copied_water_mark)){
+                            // Means Copied text already copied by ClipSync and came back again so don't send again
+                        }else{
+                            Log.e(TAG, "Copied Text : " + copied_content);
+                            if(mService != null){
+//                            sendNotification(copied_content);
+                                mService.sendCopiedText(copied_content);
+                            }
+                        }
                     } else {
 
                         //since the clipboard contains plain text.
                         ClipData clip = mClipboardManager.getPrimaryClip();
                         String copied_content = clip.getItemAt(0).getText().toString();
-                        sendNotification(copied_content);
+                        Log.e(TAG,"Content at 0 "+copied_content);
+                        if(copied_content.contains(GlobalValues.copied_water_mark)){
+                            // Means Copied text already copied by ClipSync and came back again so don't send again
+                        }else{
+                            Log.e(TAG, "Copied Text : " + copied_content);
+                            if(mService != null){
+//                            sendNotification(copied_content);
+                            mService.sendCopiedText(copied_content);
+                            }
+                        }
+
                     }
 
                 }

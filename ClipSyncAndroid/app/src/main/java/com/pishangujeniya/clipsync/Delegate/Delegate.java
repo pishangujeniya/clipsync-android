@@ -1,4 +1,4 @@
-package com.clipsync.clipsync.Delegate;
+package com.pishangujeniya.clipsync.Delegate;
 
 public class Delegate {
 

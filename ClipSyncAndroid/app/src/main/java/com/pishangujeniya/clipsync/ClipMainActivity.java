@@ -1,7 +1,6 @@
-package com.clipsync.clipsync;
+package com.pishangujeniya.clipsync;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,12 +19,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.clipsync.clipsync.helper.DataHolder;
-import com.clipsync.clipsync.helper.Utility;
-import com.clipsync.clipsync.networking.CustomRequest;
 import com.gdacciaro.iOSDialog.iOSDialog;
 import com.gdacciaro.iOSDialog.iOSDialogBuilder;
 import com.gdacciaro.iOSDialog.iOSDialogClickListener;
+import com.pishangujeniya.clipsync.helper.DataHolder;
+import com.pishangujeniya.clipsync.helper.Utility;
+import com.pishangujeniya.clipsync.networking.CustomRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,11 +1,14 @@
-package com.clipsync.clipsync;
+package com.pishangujeniya.clipsync;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,15 +24,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.clipsync.clipsync.Delegate.Delegate;
-import com.clipsync.clipsync.adapters.ClipContentRecyclerAdapter;
-import com.clipsync.clipsync.helper.DataHolder;
-import com.clipsync.clipsync.helper.Utility;
-import com.clipsync.clipsync.networking.CustomRequest;
-import com.clipsync.clipsync.service.ClipBoardMonitor;
 import com.gdacciaro.iOSDialog.iOSDialog;
 import com.gdacciaro.iOSDialog.iOSDialogBuilder;
 import com.gdacciaro.iOSDialog.iOSDialogClickListener;
+import com.pishangujeniya.clipsync.Delegate.Delegate;
+import com.pishangujeniya.clipsync.adapters.ClipContentRecyclerAdapter;
+import com.pishangujeniya.clipsync.helper.DataHolder;
+import com.pishangujeniya.clipsync.helper.Utility;
+import com.pishangujeniya.clipsync.networking.CustomRequest;
+import com.pishangujeniya.clipsync.service.ClipBoardMonitor;
+import com.pishangujeniya.clipsync.service.SignalRService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +49,13 @@ public class DashBoard extends Activity implements SwipeRefreshLayout.OnRefreshL
 
     private static final int ISUPDATED = 1;
 
+    private boolean mBound = false;
+    private SignalRService mService;
+
+
     RecyclerView recyclerView;
+
+    private ServiceConnection mConnection;
     ArrayList<DataHolder.ClipSyncClipData> clipSyncClipDataArrayList;
     ClipContentRecyclerAdapter clipContentRecyclerAdapter;
     Utility utility;
@@ -64,6 +74,8 @@ public class DashBoard extends Activity implements SwipeRefreshLayout.OnRefreshL
         setContentView(R.layout.activity_dash_board);
         utility = new Utility(this);
 
+        Log.e(TAG,"onCreate");
+
         recyclerView = findViewById(R.id.activity_dashboard_clip_recycler_view);
         swiper = findViewById(R.id.swiper);
         swiper.setOnRefreshListener(this);
@@ -77,7 +89,7 @@ public class DashBoard extends Activity implements SwipeRefreshLayout.OnRefreshL
         new_clip = findViewById(R.id.new_clip);
 
         queue = Volley.newRequestQueue(this);
-        startService(new Intent(this, ClipBoardMonitor.class));
+
         setupDashboard();
 
         getLatestVersion();
@@ -102,7 +114,49 @@ public class DashBoard extends Activity implements SwipeRefreshLayout.OnRefreshL
                 startActivityForResult(intent, REQUEST_CLIP_MAIN_ACTIVITY);
             }
         });
+
+        /*mConnection = new ServiceConnection() {
+
+            @Override
+            public void onServiceConnected(ComponentName className, IBinder service) {
+                Log.e("Activity : ", "Inside service connected - Activity ");
+                // We've bound to SignalRService, cast the IBinder and get SignalRService instance
+                SignalRService.LocalBinder binder = (SignalRService.LocalBinder) service;
+                mService = binder.getService();
+                mBound = true;
+                Log.e("Activity : ", "bound status - " + mBound);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName arg0) {
+                mService = null;
+                mBound = false;
+                Log.e("Activity : ", "bound disconnected - status - " + mBound);
+            }
+        };*/
+
+        Intent signalRServiceIntent = new Intent(DashBoard.this,SignalRService.class);
+        startService(signalRServiceIntent);
+
+        // Always Call after SignalR Service Started
+        startService(new Intent(this, ClipBoardMonitor.class));
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /*// Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+            Log.e("Activity : ", "bound disconnecting - status - " + mBound);
+
+        }
+        if (mService != null) {
+            mService.onDestroy();
+        }*/
+    }
+
 
     private void getLatestVersion() {
         final String url = getResources().getString(R.string.apiCheckUpdate);
@@ -317,7 +371,7 @@ public class DashBoard extends Activity implements SwipeRefreshLayout.OnRefreshL
 
             @Override
             public void onErrorResponse(VolleyError response) {
-                Log.d("Response: ", response.toString());
+                Log.e("Response: ", response.toString());
             }
         });
 
