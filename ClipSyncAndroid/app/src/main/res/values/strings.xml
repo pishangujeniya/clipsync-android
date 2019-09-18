@@ -33,5 +33,7 @@
     <string name="update_app">There is a new version update available, Do you want to update it ?</string>
     <string name="enter_text_here">Enter Text Here</string>
     <string name="title">TITLE</string>
+    <string name="server_address">Server Address</string>
+    <string name="server_port">Server Port</string>
 
 </resources>

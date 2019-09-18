@@ -60,6 +60,27 @@ public class Utility {
         return userSharedPref.getInt("UID", 0);
     }
 
+    public void setServerAddress(String address) {
+        SharedPreferences.Editor editor = userSharedPref.edit();
+        editor.putString("SERVER_ADDRESS", address);
+        editor.commit();
+    }
+
+    public String getServerAddress() {
+        return userSharedPref.getString("SERVER_ADDRESS", null);
+    }
+
+    public void setServerPort(int port) {
+        SharedPreferences.Editor editor = userSharedPref.edit();
+        editor.putInt("SERVER_PORT", port);
+        editor.commit();
+    }
+
+    public int getServerPort() {
+        return userSharedPref.getInt("SERVER_PORT", 0);
+    }
+
+
     public void setuserName(String userName) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putString("USERNAME", userName);

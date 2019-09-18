@@ -203,7 +203,8 @@ public class SignalRService extends Service {
         };
         // Connect to the server
         String parameters = "&uid=" + utility.getUid() + "&platform=ANDROID" + "&device_id=" + Build.SERIAL;
-        conn = new HubConnection(GlobalValues.SignalRServerURL, parameters, true, logger);
+        String server_address = "http://" + utility.getServerAddress() + ":" + utility.getServerPort();
+        conn = new HubConnection(server_address, parameters, true, logger);
 
         // Create the hub proxy
         HubProxy proxy = conn.createHubProxy(GlobalValues.SignalHubName);

@@ -6,7 +6,7 @@ android {
             enable true
             reset()
 //            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
-            include 'x86', 'armeabi-v7a'
+            include 'armeabi-v7a'
             universalApk false
         }
     }
@@ -15,8 +15,8 @@ android {
         applicationId "com.pishangujeniya.clipsync"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 15
-        versionName "1.5"
+        versionCode 16
+        versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -32,7 +32,7 @@ android {
         exclude 'lib/getLibs.sh'
         exclude 'lib/gson-2.8.2.jar'
     }
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.2'
 }
 repositories {
     mavenCentral()
@@ -52,12 +52,7 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    // MikePenz Material Drawer
-    //    implementation("com.mikepenz:materialdrawer:6.0.8@aar") {
-    //        transitive = true
-    //    }
-    //iOS AlertDialog
-    implementation 'com.gdacciaro:iosdialog:1.0.3'
+
     //Permissions
     implementation 'pub.devrel:easypermissions:2.0.0'
     // NETWORKING
@@ -67,7 +62,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     // SignalR Library
     //    implementation files('libs/gson-2.2.2.jar')
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation files('libs/signalr-client-sdk-android.jar')
     implementation files('libs/signalr-client-sdk.jar')
 }
