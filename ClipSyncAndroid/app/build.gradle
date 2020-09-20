@@ -6,18 +6,18 @@ android {
             enable true
             reset()
 //            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
-            include 'armeabi-v7a'
+//            include 'armeabi-v7a'
             universalApk false
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.pishangujeniya.clipsync"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 16
         versionName "1.6"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
     buildTypes {
@@ -32,7 +32,7 @@ android {
         exclude 'lib/getLibs.sh'
         exclude 'lib/gson-2.8.2.jar'
     }
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '29.0.3'
 }
 repositories {
     mavenCentral()
@@ -40,26 +40,22 @@ repositories {
     jcenter()
 }
 
-ext {
-    supportLibraryVersion = '28.0.0'
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:design:$supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //Permissions
-    implementation 'pub.devrel:easypermissions:2.0.0'
+    implementation 'pub.devrel:easypermissions:3.0.0'
     // NETWORKING
-    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.android.volley:volley:1.1.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // SignalR Library
     //    implementation files('libs/gson-2.2.2.jar')
     implementation 'com.google.code.gson:gson:2.8.5'

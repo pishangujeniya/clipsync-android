@@ -54,6 +54,7 @@ public class Utility {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putInt("UID", uid);
         editor.commit();
+
     }
 
     public int getUid() {
