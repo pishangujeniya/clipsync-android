@@ -25,7 +25,6 @@ What things you need to install the software and how to install them
 
 ### ClipSync Repositories
 
-* [clipsync-server](https://github.com/pishangujeniya/clipsync-server)
 * [clipsync-windows](https://github.com/pishangujeniya/clipsync-windows)
 * [clipsync-android](https://github.com/pishangujeniya/clipsync-android)
 
