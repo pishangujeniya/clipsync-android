@@ -9,7 +9,7 @@ Paste in Android
 
 ### NOTE
 > With the update from Android 10 the clipboard access to any Android apps is restricted from the OS, so this app will not work in Android 10 or later devices, but Windows to Windows Copy Paste Clipboard syncing will work as usual. 
-> 
+> Will work perfect with lower versions of Android OS than 10
 > [Android 10 Policy Change](https://developer.android.com/about/versions/10/privacy/changes#clipboard-data)
 
 ## Getting Started with ClipSync Android Application Development
