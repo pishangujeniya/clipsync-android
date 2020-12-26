@@ -53,7 +53,7 @@ public class Utility {
     public void setUid(int uid) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putInt("UID", uid);
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -64,7 +64,7 @@ public class Utility {
     public void setServerAddress(String address) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putString("SERVER_ADDRESS", address);
-        editor.commit();
+        editor.apply();
     }
 
     public String getServerAddress() {
@@ -74,7 +74,7 @@ public class Utility {
     public void setServerPort(int port) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putInt("SERVER_PORT", port);
-        editor.commit();
+        editor.apply();
     }
 
     public int getServerPort() {
@@ -85,7 +85,7 @@ public class Utility {
     public void setuserName(String userName) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putString("USERNAME", userName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getuserName() {
@@ -95,7 +95,7 @@ public class Utility {
     public void setEmail(String email) {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.putString("EMAIL", email);
-        editor.commit();
+        editor.apply();
     }
 
     public String getEmail() {
@@ -105,7 +105,7 @@ public class Utility {
     public void clearUserPrefs() {
         SharedPreferences.Editor editor = userSharedPref.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 
     public String getLastClipboardText() {

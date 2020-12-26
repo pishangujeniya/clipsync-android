@@ -10,13 +10,13 @@ android {
             universalApk false
         }
     }
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.pishangujeniya.clipsync"
         minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 16
-        versionName "1.6"
+        targetSdkVersion 30
+        versionCode 20
+        versionName "2.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
@@ -42,7 +42,7 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     //Glide
@@ -58,7 +58,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // SignalR Library
     //    implementation files('libs/gson-2.2.2.jar')
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation files('libs/signalr-client-sdk-android.jar')
     implementation files('libs/signalr-client-sdk.jar')
 }

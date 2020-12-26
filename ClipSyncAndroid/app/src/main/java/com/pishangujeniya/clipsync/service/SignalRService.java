@@ -25,6 +25,8 @@ import com.pishangujeniya.clipsync.GlobalValues;
 import com.pishangujeniya.clipsync.R;
 import com.pishangujeniya.clipsync.helper.Utility;
 
+import java.util.UUID;
+
 import microsoft.aspnet.signalr.client.Action;
 import microsoft.aspnet.signalr.client.ConnectionState;
 import microsoft.aspnet.signalr.client.ErrorCallback;
@@ -202,7 +204,7 @@ public class SignalRService extends Service {
             }
         };
         // Connect to the server
-        String parameters = "&uid=" + utility.getUid() + "&platform=ANDROID" + "&device_id=" + Build.SERIAL;
+        String parameters = "&uid=" + utility.getUid() + "&platform=ANDROID" + "&device_id=" + UUID.randomUUID().toString();
         String server_address = "http://" + utility.getServerAddress() + ":" + utility.getServerPort();
         conn = new HubConnection(server_address, parameters, true, logger);
 
