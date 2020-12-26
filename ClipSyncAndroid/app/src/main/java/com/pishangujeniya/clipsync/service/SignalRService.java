@@ -16,7 +16,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
@@ -24,6 +24,8 @@ import com.pishangujeniya.clipsync.ControlsActivity;
 import com.pishangujeniya.clipsync.GlobalValues;
 import com.pishangujeniya.clipsync.R;
 import com.pishangujeniya.clipsync.helper.Utility;
+
+import java.util.UUID;
 
 import microsoft.aspnet.signalr.client.Action;
 import microsoft.aspnet.signalr.client.ConnectionState;
@@ -202,7 +204,7 @@ public class SignalRService extends Service {
             }
         };
         // Connect to the server
-        String parameters = "&uid=" + utility.getUid() + "&platform=ANDROID" + "&device_id=" + Build.SERIAL;
+        String parameters = "&uid=" + utility.getUid() + "&platform=ANDROID" + "&device_id=" + UUID.randomUUID().toString();
         String server_address = "http://" + utility.getServerAddress() + ":" + utility.getServerPort();
         conn = new HubConnection(server_address, parameters, true, logger);
 

@@ -1,16 +1,13 @@
 package com.pishangujeniya.clipsync;
 
 import android.app.ActivityManager;
-import android.content.ClipboardManager;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pishangujeniya.clipsync.helper.Utility;
